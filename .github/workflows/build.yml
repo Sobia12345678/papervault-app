@@ -1,0 +1,27 @@
+name: Build PaperVault APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build with Buildozer
+      uses: digreatbrian/buildozer-action@v2
+      with:
+        python-version: 3.11
+        buildozer-cmd: buildozer -v android debug
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PaperVault-APK
+        path: ./bin/*.apk
+        if-no-files-found: error
